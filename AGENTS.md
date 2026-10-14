@@ -188,7 +188,7 @@ npm run lint      # oxlint
 - Linter: **oxlint** (default de `create-vite` 9; script `npm run lint`). No se agregó ESLint.
 - Alias `@/*` → `src/*` (configurado en `vite.config.ts` y `tsconfig.app.json`; sin `baseUrl`
   por deprecación en TS 6).
-- `base: '/'` en `vite.config.ts` (el repo será `lucho2206ab.github.io`, sitio de usuario).
+- `base: '/'` en `vite.config.ts` (sirve tanto para Vercel como para un eventual sitio de usuario).
 - `strict` + `noUncheckedIndexedAccess` + `exactOptionalPropertyTypes` + `verbatimModuleSyntax`.
 - Fuentes Space Grotesk + JetBrains Mono vía Google Fonts en `index.html`.
 - `public/favicon.svg`: **placeholder** con la marca de 5 líneas (se hero-ifica en Paso 2).
@@ -201,6 +201,10 @@ npm run lint      # oxlint
   activos en `index.html`, apuntando al dominio de Vercel.
 - Despliegue hecho (Paso 5): GitHub (`lucho2206ab/Portfolio`) + Vercel
   (`luis-abreu-portfolio.vercel.app`, auto-deploy en push a `main`).
+- **Dominio propio (a futuro):** el usuario comprará un dominio más adelante. Cuando lo tenga:
+  reemplazar `https://luis-abreu-portfolio.vercel.app` por el nuevo dominio en `index.html`
+  (canonical, `og:url`, `og:image`, `twitter:image`), `public/robots.txt` y `public/sitemap.xml`;
+  luego `vercel domains add <dominio>` y configurar el DNS. **La URL actual queda perfecta por ahora.**
 
 ### Paso 2 — Layout / navbar / hero (2026-10)
 - `Background` global (glows violeta/azul/celeste + viñeta) en `src/components/layout/Background.tsx`.
@@ -212,7 +216,8 @@ npm run lint      # oxlint
 - Helpers: `src/lib/cn.ts` (clases) y `src/lib/motion.ts` (variantes). `MotionConfig reducedMotion="user"`.
 - **Íconos de marca propios** en `src/components/ui/icons.tsx` (GitHub/LinkedIn): lucide-react v1 ya
   **no** incluye íconos de marcas.
-- Nav labels aún hardcodeados en `src/data/navigation.ts` → migrar a i18n en Paso 4.
+- Nav labels migrados a i18n (Paso 4): `src/data/navigation.ts` guarda `id` + `key` (`nav.*`) y los
+  textos viven en `src/i18n/locales`.
 - Las secciones del Paso 3 deben incluir `scroll-mt-28` (offset por el navbar fijo).
 - **Selección de proyectos confirmada (5):** Sistema de expedientes (ASIC), Agricultura de precisión
   (IoT), Mi_huella_app, Origamix, Asic_mapas.
@@ -248,3 +253,23 @@ npm run lint      # oxlint
 - **Decisión:** los fondos/gradientes con color de marca (glows del `Background`, botón primario)
   usan clases con `dark:` para ajustar intensidad; el botón primario mantiene `text-white` fijo.
 - Todos los componentes migrados del set ad-hoc (`white/*`, `slate-*`, `ink-*`) a tokens semánticos.
+
+### Paso 5 — Pulido, accesibilidad, SEO y despliegue (2026-10)
+- **Accesibilidad:** `SkipLink` (`src/components/layout/SkipLink.tsx`) con `sr-only` +
+  `focus:not-sr-only`, apuntando a `<main id="contenido">`. Foco visible global (`:focus-visible`)
+  definido en `src/index.css`. Labels i18n `a11y.*` (nav, menú, idioma, tema, volver arriba, saltar).
+- **SEO:** `index.html` con `title`, `description`, `author`, `theme-color`, `canonical`, Open Graph
+  (`og:*` + `og:image` 1200×630 + `image:alt`) y Twitter (`summary_large_image`).
+  `public/og.png` generado con Edge headless (`--headless=new --screenshot --window-size=1200,630`).
+  `public/robots.txt` y `public/sitemap.xml` presentes. Todas las URLs apuntan al dominio de Vercel.
+- **Rendimiento:** bundle ~452 kB (143 kB gzip) — framer-motion + i18next. Fuentes con `display=swap`
+  + `preconnect`. *(Quedó pendiente un posible code-splitting si se busca exprimir Lighthouse.)*
+- **Repositorio / despliegue:**
+  - `git init` (rama `main`), commit inicial + push a `https://github.com/lucho2206ab/Portfolio`
+    (rebase sobre el README autogenerado por GitHub). Identidad local:
+    `Luis Alberto Abreu <luis.abreumza@gmail.com>`.
+  - `vercel.json` corrige el preset (Vite/`dist`). Proyecto `luisab-projects/luis-abreu-portfolio`
+    linkeado desde el repo (`vercel link`); GitHub **conectado** (`vercel git connect`) →
+    auto-deploy en cada push a `main`.
+  - `.gitignore` ampliado: `.vercel`, `.env*` (excepto `.env.example`), `.vercelignore`.
+  - Producción verificada: `/`, `/robots.txt`, `/sitemap.xml`, `/og.png`, `/favicon.svg` → 200.
