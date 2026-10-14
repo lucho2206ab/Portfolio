@@ -122,9 +122,17 @@ links a repo/demo) → Contacto (email, GitHub, LinkedIn) → Footer.
 
 ## 9. Despliegue
 
-- **Destino principal: Vercel** (pedido del usuario). Vite detectado automáticamente; `base: '/'`.
-  No requiere `vercel.json` para un SPA de una sola página.
-- Se subirá también a **GitHub** (`lucho2206ab.github.io` o repo propio del portfolio).
+- **Producción: Vercel.** URL: https://luis-abreu-portfolio.vercel.app
+  - Proyecto Vercel: `luisab-projects/luis-abreu-portfolio` (scope `luisab-projects`, usuario
+    `lucho2206ab`).
+  - `vercel.json` en la raíz fuerza `framework: vite`, `buildCommand: npm run build` y
+    `outputDirectory: dist` (el proyecto se creó con preset "Other" y servía `public/` → 404).
+  - **Repo GitHub conectado:** `https://github.com/lucho2206ab/Portfolio` (branch `main`) →
+    auto-deploy en cada push (`vercel git connect` respondió "already connected").
+  - Deploy manual: `vercel --prod --yes` (requiere `vercel login`; sesión local ya activa).
+- **Dominio en meta tags:** todas las URLs SEO (canonical, `og:url`, `og:image`, `twitter:image`,
+  `robots.txt`, `sitemap.xml`) apuntan a `https://luis-abreu-portfolio.vercel.app`.
+- (Opcional) Dominio propio a futuro: actualizar las URLs anteriores y `vercel domains add`.
 - (Opcional) workflow de GitHub Actions para GitHub Pages.
 
 ## 10. Forma de trabajo
@@ -162,8 +170,8 @@ npm run lint      # oxlint
       (5 confirmados) y Contacto + Footer. — *completado*
 - [x] **Paso 4** — i18n (ES/EN) **hecho** (adelantado al Paso 3, pedido del usuario). **Tema
       claro/oscuro hecho** (tokens semánticos + toggle + anti-FOUC).
-- [~] **Paso 5** — Pulido, accesibilidad, SEO y despliegue (Vercel). Hecho: skip-link, `og.png`,
-  `robots.txt`, `sitemap.xml`, `.gitignore`. Falta: dominio final + despliegue (Vercel/GitHub).
+- [x] **Paso 5** — Pulido, accesibilidad, SEO y despliegue (Vercel). Hecho: skip-link, `og.png`,
+  `robots.txt`, `sitemap.xml`, `.gitignore`, repo git + GitHub y deploy en Vercel con auto-deploy.
 
 ## Decisiones / Notas
 
@@ -190,11 +198,9 @@ npm run lint      # oxlint
   marca de 5 líneas con trazo más grueso. Colocar referencias originales en `src/assets/` (hoy solo
   `.gitkeep`) si el usuario las aporta.
 - `public/og.png` (1200×630) generado con Edge headless — *hecho* (Paso 5). `og:image`/`twitter:image`
-  activos en `index.html`.
-- TODO(step-5): reemplazar `lucho2206ab.github.io` por el **dominio final** (Vercel) en `index.html`
-  (canonical, `og:url`, `og:image`, `twitter:image`) y en `public/robots.txt` / `public/sitemap.xml`.
-- TODO(step-5): desplegar en Vercel (requiere login `vercel`) y/o `git init` + push a GitHub
-  (pedir confirmación al usuario antes de tocar git).
+  activos en `index.html`, apuntando al dominio de Vercel.
+- Despliegue hecho (Paso 5): GitHub (`lucho2206ab/Portfolio`) + Vercel
+  (`luis-abreu-portfolio.vercel.app`, auto-deploy en push a `main`).
 
 ### Paso 2 — Layout / navbar / hero (2026-10)
 - `Background` global (glows violeta/azul/celeste + viñeta) en `src/components/layout/Background.tsx`.

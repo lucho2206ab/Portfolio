@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lucho2206ab.github.io/sitemap.xml
+Sitemap: https://luis-abreu-portfolio.vercel.app/sitemap.xml
